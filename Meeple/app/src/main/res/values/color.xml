@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="transparent">@android:color/transparent</color>
+    <color name="black">#000000</color>
+    <color name="red">#DF3942</color>
+    <color name="white">#FFFFFF</color>
+    <color name="border">#59171A</color>
+    <color name="gray">#cdc9c9</color>
+    <color name="blue">#4BBEFF</color>
+
+
+    <color name="primaryColor">#467BB0</color>
+    <color name="primaryColorDark">#37618B</color>
+    <color name="actionbar_title_text">#ffffff</color>
+
+    <color name="chat_right_bubble">#B5CADF</color>
+    <color name="chat_left_bubble">#E0E0E0</color>
+
+</resources>

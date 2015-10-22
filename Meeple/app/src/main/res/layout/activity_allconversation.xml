@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <ListView
+        android:id="@+id/lvChats"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        android:divider="@color/primaryColor"
+        android:dividerHeight="1.0sp"
+        android:scrollbars="none"
+        android:visibility="visible"
+        tools:listitem="@layout/list_item_user"></ListView>
+
+    <TextView
+        android:id="@+id/tvNoUser"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone"
+        android:padding="20dp"
+        android:text="No User Available"
+        android:textColor="@color/primaryColorDark"
+        android:textSize="24sp" />
+
+</LinearLayout>
