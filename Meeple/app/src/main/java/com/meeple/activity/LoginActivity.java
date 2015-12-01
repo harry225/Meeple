@@ -80,6 +80,7 @@ public class LoginActivity extends AppCompatActivity {
             if (etEmail.getText().toString().length() == 0) {
 
                 etEmail.setError("Please enter Email or UserID");
+                return;
             }
 
             if (isValidEmail(etEmail.getText().toString())) {
@@ -87,6 +88,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (etPassword.getText().toString().length() == 0) {
 
                     etPassword.setError("Please enter Password");
+                    return;
                 } else {
                     if (Utils.isNetworkAvailable(LoginActivity.this)) {
                         login();
@@ -100,12 +102,14 @@ public class LoginActivity extends AppCompatActivity {
                 if (etEmail.getText().toString().contains("@") || etEmail.getText().toString().contains("_")) {
 
                     etEmail.setError("Please enter valid userid");
+                    return;
 
                 } else {
 
                     if (etPassword.getText().toString().length() == 0) {
 
                         etPassword.setError("Please enter Password");
+                        return;
 
                     } else {
                         if (Utils.isNetworkAvailable(LoginActivity.this)) {
@@ -169,7 +173,6 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public void onSuccess(int i, Header[] headers, byte[] responseBody) {
 
-
             pd.dismiss();
 
             String content = new String(responseBody);
@@ -212,7 +215,6 @@ public class LoginActivity extends AppCompatActivity {
 
         }
 
-
         @Override
         public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable) {
 
@@ -231,7 +233,6 @@ public class LoginActivity extends AppCompatActivity {
         }
 
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

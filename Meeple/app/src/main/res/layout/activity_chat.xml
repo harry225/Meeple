@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llRootView"
+    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    xmlns:tools="http://schemas.android.com/tools"
     tools:context=".activity.ChatActivity">
 
     <include
@@ -11,42 +13,52 @@
         layout="@layout/toolbar" />
 
     <ListView
-        android:clipToPadding="false"
-        android:paddingBottom="10dp"
         android:id="@+id/lvChats"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:clipToPadding="false"
         android:divider="@color/transparent"
         android:dividerHeight="5dp"
-        android:transcriptMode="alwaysScroll"
+        android:paddingBottom="10dp"
         android:stackFromBottom="true"
-       >
+        android:transcriptMode="alwaysScroll">
 
     </ListView>
 
     <LinearLayout
-        android:background="@color/gray"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/gray"
         android:orientation="horizontal"
         android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/ivEmoji"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="5dp"
+            android:src="@drawable/smiley" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1">
-            <EditText
+
+            <com.meeple.emojicon.EmojiconEditText
                 android:id="@+id/etWriteMessage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginRight="10dp"
-                android:inputType="textMultiLine"
                 android:background="@color/white"
                 android:hint="@string/writemessage"
+                android:inputType="textMultiLine"
                 android:maxLines="5"
                 android:minLines="4"
-                android:paddingLeft="10dp" />
+                android:paddingLeft="10dp"
+                emojicon:emojiconSize="28sp" />
         </LinearLayout>
 
         <TextView

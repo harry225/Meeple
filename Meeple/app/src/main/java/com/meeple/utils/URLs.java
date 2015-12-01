@@ -8,7 +8,7 @@ public class URLs {
 
     public static String BASE_URL = "http://52.20.93.93:8080/";
 
-//    public static String BASE_URL = "http://192.168.0.112:8080/";
+//  public static String BASE_URL = "http://192.168.0.112:8080/";
 
     public static String LOGIN = BASE_URL + "login";
     public static String SIGNUP = BASE_URL + "user";
@@ -20,5 +20,6 @@ public class URLs {
     public static String BLOCKUSER = BASE_URL + "user/blockUser";
     public static String UNBLOCKUSER = BASE_URL + "user/unblockUser";
     public static String LOCATION_UPDATE = BASE_URL + "user/location";
+    public static String AMAZON_IMG_BASE = "https://s3.amazonaws.com/meeple-img/";
 
 }

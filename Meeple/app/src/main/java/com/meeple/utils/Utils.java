@@ -45,6 +45,25 @@ public class Utils {
         editor.commit();
     }
 
+    public static void saveLatLong(Context context, String key,
+                                   double value) {
+        Log.d("Utils", "Saving:" + key + ":" + value);
+        SharedPreferences preferences = context.getSharedPreferences(
+                Constant.SHARED_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putLong(key, Double.doubleToLongBits(value));
+        editor.commit();
+    }
+
+    public static Double getLatLong(Context context, String key) {
+
+        SharedPreferences preferences = context.getSharedPreferences(
+                Constant.SHARED_PREFS, Context.MODE_PRIVATE);
+
+        return Double.longBitsToDouble(preferences.getLong(key, 0));
+
+    }
+
     public static void clearUserDefaults(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(
                 Constant.SHARED_PREFS, Context.MODE_PRIVATE);
@@ -105,6 +124,7 @@ public class Utils {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("dd MMM,hh:mm aa");
         String formattedDate = df.format(c.getTime());
+        Log.e("Device Time",formattedDate);
         return formattedDate;
     }
 

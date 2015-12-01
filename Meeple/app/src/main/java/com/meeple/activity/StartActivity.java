@@ -36,7 +36,6 @@ public class StartActivity extends AppCompatActivity {
         }
         initToolbar();
         initViews();
-
     }
 
     private void initToolbar() {

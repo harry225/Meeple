@@ -3,35 +3,53 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="right"
-    android:paddingLeft="100dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingLeft="100dp">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="10dp"
-        android:padding="10dp"
-        android:background="@drawable/chat_item_right">
+        android:background="@drawable/chat_item_right"
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvchatMessage"
+        <LinearLayout
+            android:id="@+id/llMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ABCDEFGHIJKLMNOPQ"
-            android:textColor="@color/white"
-            android:textSize="14sp" />
+            android:orientation="vertical">
+
+            <com.meeple.emojicon.EmojiconTextView
+                android:id="@+id/tvchatMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ABCDEFGHIJKLMNOPQ"
+                android:padding="10dp"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:layout_gravity="center"
+                android:id="@+id/ivChatImage"
+                android:layout_width="@dimen/chat_image_size"
+                android:padding="2dp"
+                android:layout_height="@dimen/chat_image_size"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+
+        </LinearLayout>
 
         <TextView
-            android:layout_gravity="right"
             android:id="@+id/tvChatTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvchatMessage"
+            android:layout_below="@+id/llMessage"
+            android:layout_gravity="right"
+            android:paddingBottom="10dp"
+            android:paddingRight="10dp"
             android:text="Today,10:00 AM"
             android:textColor="@color/white"
-            android:textSize="8sp"
-            />
+            android:textSize="8sp" />
 
     </LinearLayout>
 

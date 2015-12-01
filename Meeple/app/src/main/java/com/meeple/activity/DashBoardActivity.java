@@ -3,6 +3,7 @@ package com.meeple.activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import com.meeple.json.UsersListInfo;
 import com.meeple.json.UsersObject;
 import com.meeple.utils.AlertMessages;
 import com.meeple.utils.Constant;
+import com.meeple.utils.DBAdapter;
 import com.meeple.utils.Debug;
 import com.meeple.utils.GPSTracker;
 import com.meeple.utils.URLs;
@@ -47,6 +49,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -84,6 +87,7 @@ public class DashBoardActivity extends AppCompatActivity {
     double longitude;
 
     final int RESULT_LOCATION = 8;
+    DBAdapter dba;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +95,11 @@ public class DashBoardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
 
         Log.e("onCreate******", "");
+
+        dba = new DBAdapter(this);
+        dba.open();
+        dba.close();
+
 
         initToolbar();
         initViews();
@@ -103,10 +112,23 @@ public class DashBoardActivity extends AppCompatActivity {
         tvUserId.setText("Hello, " + Utils.getFromUserDefaults(this, Constant.PARAMS_USERID));
 
         if (!isGPSEnable) {
-            showSettingsAlert();
+
+            if (Utils.getLatLong(DashBoardActivity.this, Constant.PARAMS_LATITUDE) == 0) {
+
+                showSettingsAlert();
+
+            } else {
+
+                Log.e("Latitute-Longitude", "" + Utils.getLatLong(DashBoardActivity.this, Constant.PARAMS_LATITUDE) + " " + Utils.getLatLong(DashBoardActivity.this, Constant.PARAMS_LONGITUDE));
+
+            }
+
         } else {
+
             latitude = gpsTracker.getLatitude();
             longitude = gpsTracker.getLongitude();
+            Utils.saveLatLong(DashBoardActivity.this, Constant.PARAMS_LATITUDE, latitude);
+            Utils.saveLatLong(DashBoardActivity.this, Constant.PARAMS_LONGITUDE, longitude);
             updateLocation(latitude, longitude);
 
 //            Geocoder gcd = new Geocoder(this, Locale.getDefault());
@@ -118,21 +140,27 @@ public class DashBoardActivity extends AppCompatActivity {
 //                e.printStackTrace();
 //            }
 //            getUserList();
+
         }
     }
 
-    View.OnClickListener OnClickListenertvProfile = new View.OnClickListener() {
+    View.OnClickListener OnClickListenertvProfile =  new View.OnClickListener() {
+
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(DashBoardActivity.this, ProfileActivity.class);
 //            startActivity(intent);
             startActivityForResult(intent, RESULT_PROFILE);
         }
+
     };
 
     View.OnClickListener OnClickListenertvLogout = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            dba.open();
+            dba.deleteConversationListRecord();
+            dba.close();
             Utils.clearUserDefaults(DashBoardActivity.this);
             Intent intent = new Intent(DashBoardActivity.this, StartActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -144,19 +172,50 @@ public class DashBoardActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             if (Utils.isNetworkAvailable(DashBoardActivity.this)) {
+                dba.open();
+                dba.deleteNewConversationListRecord();
+                dba.close();
                 gpsTracker = new GPSTracker(DashBoardActivity.this);
                 isGPSEnable = gpsTracker.isGPSEnabled;
-
                 if (!isGPSEnable) {
-                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                    startActivityForResult(intent, 1);
+                    latitude = Utils.getLatLong(DashBoardActivity.this, Constant.PARAMS_LATITUDE);
+                    longitude = Utils.getLatLong(DashBoardActivity.this, Constant.PARAMS_LONGITUDE);
+                    Log.e("Latitute-Longitude", "" + latitude + " " + longitude);
+//                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+//                    startActivityForResult(intent, 1);
                 } else {
                     latitude = gpsTracker.getLatitude();
                     longitude = gpsTracker.getLongitude();
-                    getUserList(latitude, longitude);
+                    Log.e("Latitute-Longitude", "" + latitude + " " + longitude);
                 }
+                getUserList(latitude, longitude);
             } else {
-                alertMessages.showErrornInConnection();
+                dba.open();
+                usersList = new ArrayList<UsersObject>();
+                Cursor cursor = dba.getNewConversationList();
+                Log.e("Cursor****", "" + cursor.getCount());
+                if (cursor.getCount() == 0) {
+
+                } else {
+
+                    if (cursor.moveToFirst()) {
+
+                        while (cursor.isAfterLast() == false) {
+
+                            UsersObject usersObject = new UsersObject();
+                            usersObject.id = cursor.getString(cursor.getColumnIndex("id_conv"));
+                            usersObject.name = cursor.getString(cursor.getColumnIndex("name"));
+                            usersObject.userID = cursor.getString(cursor.getColumnIndex("userid"));
+                            usersObject.email = cursor.getString(cursor.getColumnIndex("email"));
+                            usersObject.isBlock = Integer.valueOf(cursor.getString(cursor.getColumnIndex("isblock")));
+                            usersList.add(usersObject);
+                            cursor.moveToNext();
+
+                        }
+                    }
+                    showUserList();
+                }
+                dba.close();
             }
         }
     };
@@ -164,8 +223,10 @@ public class DashBoardActivity extends AppCompatActivity {
     View.OnClickListener OnClickListenertvConversations = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+
             Intent i = new Intent(DashBoardActivity.this, AllConversationActivity.class);
             startActivityForResult(i, RESULT_PROFILE);
+
         }
     };
 
@@ -180,7 +241,6 @@ public class DashBoardActivity extends AppCompatActivity {
         if (requestCode == RESULT_LOCATION) {
             gpsTracker = new GPSTracker(this);
             isGPSEnable = gpsTracker.isGPSEnabled;
-
             if (!isGPSEnable) {
                 showSettingsAlert();
             } else {
@@ -193,6 +253,7 @@ public class DashBoardActivity extends AppCompatActivity {
     }
 
     public void showSettingsAlert() {
+
         android.app.AlertDialog.Builder alertDialog = new android.app.AlertDialog.Builder(this);
 
         alertDialog.setTitle("GPS Settings");
@@ -226,8 +287,10 @@ public class DashBoardActivity extends AppCompatActivity {
                 }
 
         );
+
         alertDialog.setCancelable(false);
         alertDialog.show();
+
     }
 
     private void getUserList(double latitude, double longitude) {
@@ -235,7 +298,6 @@ public class DashBoardActivity extends AppCompatActivity {
         pd = null;
         pd = ProgressDialog.show(DashBoardActivity.this, "", "Loading...", true,
                 false);
-
         try {
             JSONObject json = new JSONObject();
             json.put("userId", Utils.getFromUserDefaults(DashBoardActivity.this, Constant.PARAMS_ID));
@@ -276,6 +338,7 @@ public class DashBoardActivity extends AppCompatActivity {
             usersList = new ArrayList<UsersObject>();
 
             for (int j = 0; j < usersListInfo.users.size(); j++) {
+
                 UsersObject usersObject = new UsersObject();
                 usersObject.id = usersListInfo.users.get(j).id;
                 usersObject.name = usersListInfo.users.get(j).name;
@@ -283,6 +346,10 @@ public class DashBoardActivity extends AppCompatActivity {
                 usersObject.userID = usersListInfo.users.get(j).userID;
                 usersObject.isBlock = usersListInfo.users.get(j).isBlock;
                 usersList.add(usersObject);
+                dba.open();
+                dba.insertNewConversation(usersObject.id, usersObject.name, usersObject.email, usersObject.userID, "" + usersObject.isBlock);
+                dba.close();
+
             }
             Debug.e("USERSLIST", "" + usersList.size());
 
@@ -300,7 +367,9 @@ public class DashBoardActivity extends AppCompatActivity {
 
         pd = ProgressDialog.show(DashBoardActivity.this, "", "Loading...", true,
                 false);
+
         try {
+
             JSONObject json = new JSONObject();
             json.put("userId", Utils.getFromUserDefaults(DashBoardActivity.this, Constant.PARAMS_ID));
             json.put("latitude", String.valueOf(latitude));
@@ -313,6 +382,7 @@ public class DashBoardActivity extends AppCompatActivity {
             client.addHeader("Token", Utils.getFromUserDefaults(DashBoardActivity.this, Constant.PARAMS_TOKEN));
 
             client.post(DashBoardActivity.this, URLs.LOCATION_UPDATE, stringEntity, "application/json", new UpdateLocationResponseHandler());
+
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (JSONException e) {
@@ -387,11 +457,14 @@ public class DashBoardActivity extends AppCompatActivity {
     }
 
     public void initToolbar() {
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
     }
 
     public void initViews() {
+
         tvUserId = (TextView) findViewById(R.id.tvUserId);
         tvNewConversation = (TextView) findViewById(R.id.tvNewConversation);
         tvConversations = (TextView) findViewById(R.id.tvConversations);
@@ -403,19 +476,27 @@ public class DashBoardActivity extends AppCompatActivity {
 
         tvNewConversation.setOnClickListener(OnClickListenertvNewConversation);
         tvConversations.setOnClickListener(OnClickListenertvConversations);
+
     }
 
     @Override
     public void onBackPressed() {
+
         Log.e("onBackPressed", "***********");
         Intent returnIntent = new Intent();
         setResult(RESULT_OK, returnIntent);
         finish();
+
     }
 
     @Override
     protected void onResume() {
+
         super.onResume();
         Log.e("onResume******", "");
+
     }
+
+
+
 }

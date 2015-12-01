@@ -29,5 +29,8 @@ public class ConversationListInfo {
         @SerializedName("createdAt")
         public String createdAt;
 
+        @SerializedName("isImage")
+        public String isImage;
+
     }
 }

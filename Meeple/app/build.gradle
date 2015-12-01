@@ -30,4 +30,7 @@ dependencies {
     compile 'org.apache.httpcomponents:httpcore:4.3.2'
     compile 'com.github.nkzawa:socket.io-client:0.3.0'
     compile 'com.google.android.gms:play-services:7.8.+'
+    compile 'com.kbeanie:image-chooser-library:1.5.2@aar'
+    compile files('libs/universal-image-loader-1.9.4.jar')
+    compile 'com.squareup.picasso:picasso:2.5.+'
 }

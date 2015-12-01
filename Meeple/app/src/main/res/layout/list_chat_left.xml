@@ -13,25 +13,34 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:background="@drawable/chat_item_left"
-        android:orientation="vertical"
-        android:padding="10dp">
+        android:orientation="vertical">
 
 
-        <TextView
+        <com.meeple.emojicon.EmojiconTextView
             android:id="@+id/tvchatMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="10dp"
             android:text="ABCDEFGHIJKLMNOPQ"
             android:textColor="@color/black"
             android:textSize="14sp" />
 
+        <ImageView
+            android:id="@+id/ivChatImage"
+            android:layout_width="@dimen/chat_image_size"
+            android:layout_height="@dimen/chat_image_size"
+            android:padding="2dp"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tvChatTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
             android:text="Today,10:00 AM"
             android:textColor="@color/black"
             android:textSize="8sp" />
