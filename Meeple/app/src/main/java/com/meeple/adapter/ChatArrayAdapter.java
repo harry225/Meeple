@@ -172,17 +172,23 @@ public class ChatArrayAdapter extends BaseAdapter {
             holder.tvchatMessage.setVisibility(View.GONE);
             holder.ivChatImage.setVisibility(View.VISIBLE);
 
-            if (data.get(position).islocally) {
+            if (data.get(position).islocally)
+            {
 
                 loadImage(holder.ivChatImage, data.get(position).local_media_path);
 
-            } else {
+            }
+
+            else
+            {
 
                 loadImage(holder.ivChatImage,URLs.AMAZON_IMG_BASE+ data.get(position).message);
 
             }
 
-        } else {
+        } else
+        {
+
             holder.tvchatMessage.setVisibility(View.VISIBLE);
             holder.ivChatImage.setVisibility(View.GONE);
             holder.tvchatMessage.setText(chatMessageObj.message);
@@ -199,9 +205,11 @@ public class ChatArrayAdapter extends BaseAdapter {
         public ImageView ivChatImage;
         public TextView tvChatTime;
         public LinearLayout llchatContainer;
+
     }
 
     private void loadImage(ImageView iv, final String path) {
+
         Picasso.with(context)
                 .load(path)
                 .fit()
@@ -215,6 +223,7 @@ public class ChatArrayAdapter extends BaseAdapter {
                     public void onError() {
                     }
                 });
+
     }
 
 

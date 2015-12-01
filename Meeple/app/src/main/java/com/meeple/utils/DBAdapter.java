@@ -160,7 +160,7 @@ public class DBAdapter {
     }
 
 
-    public boolean addMessages(String messagid,String message, String fromUserID, String toUserID, String createdAt, String isImage) {
+    public boolean addMessages(String messagid, String message, String fromUserID, String toUserID, String createdAt, String isImage) {
 
         ContentValues contentValues = new ContentValues();
 
@@ -188,7 +188,7 @@ public class DBAdapter {
 
     public int updateMessage(ContentValues contentValues, String id) {
 
-        return db.update(CHAT_TABLE_NAME, contentValues, COLUMN_ID_MESSAGE+" = ? ", new String[]{id});
+        return db.update(CHAT_TABLE_NAME, contentValues, COLUMN_ID_MESSAGE + " = ? ", new String[]{id});
 
     }
 
@@ -214,6 +214,15 @@ public class DBAdapter {
         return c;
     }
 
+
+    public Cursor getChat(String userid) {
+
+        Cursor cursor = db.rawQuery("select * from " + CHAT_TABLE_NAME + " where " + COLUMN_FROMUSER + "=" + userid + " or " + COLUMN_TOUSER + "=" + userid, null);
+
+        return cursor;
+
+    }
+
     public void deleteConversationListRecord() {
         db.execSQL("delete from " + CONVERSATION_TABLE_NAME);
     }
@@ -221,5 +230,6 @@ public class DBAdapter {
     public void deleteNewConversationListRecord() {
         db.execSQL("delete from " + NEW_CONVERSATION_TABLE_NAME);
     }
+
 
 }

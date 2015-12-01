@@ -139,8 +139,6 @@ public class ChatActivity extends AppCompatActivity implements ImageChooserListe
 
         if (Utils.isNetworkAvailable(ChatActivity.this)) {
 
-            Debug.e("get remotedata", "" + true);
-
             getConversation();
 
         } else {
@@ -396,7 +394,7 @@ public class ChatActivity extends AppCompatActivity implements ImageChooserListe
 
                 DBAdapter dba = new DBAdapter(ChatActivity.this);
                 dba.open();
-                dba.addMessages(conversationObject.id , conversationObject.message, conversationObject.fromUserId, conversationObject.toUserId, conversationObject.createdAt, conversationObject.isImage);
+                dba.addMessages(conversationObject.id, conversationObject.message, conversationObject.fromUserId, conversationObject.toUserId, conversationObject.createdAt, conversationObject.isImage);
                 dba.close();
 
 
@@ -456,6 +454,7 @@ public class ChatActivity extends AppCompatActivity implements ImageChooserListe
                 } else {
 
 
+
                 }
 
             }
@@ -480,7 +479,10 @@ public class ChatActivity extends AppCompatActivity implements ImageChooserListe
 
         dba.open();
         conversation = new ArrayList<ConversationObject>();
-        Cursor cursor = dba.getMessages(usersObject.userID);
+//        Cursor cursor = dba.getMessages(usersObject.userID);
+        Cursor cursor = dba.getChat(usersObject.id);
+
+
         Log.e("Cursor**", "" + cursor.getCount());
 
         if (cursor.getCount() == 0) {
@@ -493,7 +495,7 @@ public class ChatActivity extends AppCompatActivity implements ImageChooserListe
                 while (cursor.isAfterLast() == false) {
 
                     ConversationObject conversationObject = new ConversationObject();
-//                  conversationObject.id = cursor.getString(cursor.getColumnIndex("id_message"));
+                    conversationObject.id = cursor.getString(cursor.getColumnIndex("id"));
                     conversationObject.message = cursor.getString(cursor.getColumnIndex("message"));
                     conversationObject.fromUserId = cursor.getString(cursor.getColumnIndex("fromuser"));
                     conversationObject.toUserId = cursor.getString(cursor.getColumnIndex("touser"));
