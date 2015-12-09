@@ -9,10 +9,10 @@
         android:width="0dp"
         android:color="@color/primaryColorDark" />
 
-    <corners
-        android:bottomLeftRadius="2dp"
-        android:bottomRightRadius="2dp"
-        android:topLeftRadius="2dp"
-        android:topRightRadius="2dp" />
+    <!--<corners-->
+        <!--android:bottomLeftRadius="2dp"-->
+        <!--android:bottomRightRadius="2dp"-->
+        <!--android:topLeftRadius="2dp"-->
+        <!--android:topRightRadius="2dp" />-->
 
 </shape>

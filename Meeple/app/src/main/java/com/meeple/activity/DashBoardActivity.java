@@ -4,19 +4,13 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -45,14 +39,10 @@ import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by harry on 9/25/15.
@@ -61,11 +51,8 @@ import java.util.Locale;
 public class DashBoardActivity extends AppCompatActivity {
 
     AlertMessages alertMessages;
-
     Toolbar toolbar;
-
     TextView tvUserId;
-
     TextView tvNewConversation, tvConversations;
     TextView tvProfile;
     TextView tvLogout;
@@ -93,8 +80,6 @@ public class DashBoardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-
-        Log.e("onCreate******", "");
 
         dba = new DBAdapter(this);
         dba.open();
@@ -213,7 +198,9 @@ public class DashBoardActivity extends AppCompatActivity {
 
                         }
                     }
+
                     showUserList();
+
                 }
                 dba.close();
             }
@@ -229,7 +216,6 @@ public class DashBoardActivity extends AppCompatActivity {
 
         }
     };
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -252,14 +238,12 @@ public class DashBoardActivity extends AppCompatActivity {
         }
     }
 
+
     public void showSettingsAlert() {
 
         android.app.AlertDialog.Builder alertDialog = new android.app.AlertDialog.Builder(this);
-
         alertDialog.setTitle("GPS Settings");
-
         alertDialog.setMessage("GPS is not enabled. Do you want to go to GPS Settings ?");
-
         alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
 
             @Override
@@ -298,7 +282,9 @@ public class DashBoardActivity extends AppCompatActivity {
         pd = null;
         pd = ProgressDialog.show(DashBoardActivity.this, "", "Loading...", true,
                 false);
+
         try {
+
             JSONObject json = new JSONObject();
             json.put("userId", Utils.getFromUserDefaults(DashBoardActivity.this, Constant.PARAMS_ID));
             json.put("latitude", String.valueOf(latitude));
@@ -317,6 +303,7 @@ public class DashBoardActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
     }
 
     public class ListUserResponseHandler extends AsyncHttpResponseHandler {
@@ -496,7 +483,5 @@ public class DashBoardActivity extends AppCompatActivity {
         Log.e("onResume******", "");
 
     }
-
-
 
 }

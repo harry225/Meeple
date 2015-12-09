@@ -8,6 +8,12 @@
         <item name="android:windowActionBarOverlay">true</item>
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryDark">@color/primaryColorDark</item>
+        <item name="android:actionButtonStyle">@style/MyActionButtonStyle</item>
+
+    </style>
+    <style name="MyActionButtonStyle" parent="AppTheme">
+        <item name="android:minWidth">20dip</item>
+        <item name="android:padding">20dip</item>
     </style>
 
 </resources>

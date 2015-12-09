@@ -22,7 +22,6 @@ import java.util.HashMap;
 
 public class DBAdapter {
 
-
     //Table List
     public static final String DATABASE_NAME = "MyDBName.db";
     public static final String NEW_CONVERSATION_TABLE_NAME = "New_Conversation";
@@ -114,7 +113,6 @@ public class DBAdapter {
 
     }
 
-
     public boolean insertConversation(String id, String name, String email, String userid, String isblock) {
 
         ContentValues contentValues = new ContentValues();
@@ -147,10 +145,11 @@ public class DBAdapter {
     }
 
     public Cursor getConversationList() {
+
         Cursor cursor = db.rawQuery("select * from Conversation", null);
         return cursor;
-    }
 
+    }
 
     public Cursor getNewConversationList() {
 
@@ -158,7 +157,6 @@ public class DBAdapter {
         return cursor;
 
     }
-
 
     public boolean addMessages(String messagid, String message, String fromUserID, String toUserID, String createdAt, String isImage) {
 
@@ -208,12 +206,10 @@ public class DBAdapter {
 
     }
 
-
     public Cursor getMessages(String userID) {
         Cursor c = db.query(CHAT_TABLE_NAME, null, "userid = ?", new String[]{userID}, null, null, null);
         return c;
     }
-
 
     public Cursor getChat(String userid) {
 
@@ -230,6 +226,5 @@ public class DBAdapter {
     public void deleteNewConversationListRecord() {
         db.execSQL("delete from " + NEW_CONVERSATION_TABLE_NAME);
     }
-
 
 }
