@@ -23,12 +23,9 @@ import com.meeple.utils.Constant;
 import com.meeple.utils.Debug;
 import com.meeple.utils.URLs;
 import com.meeple.utils.Utils;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
-import com.vdurmont.emoji.EmojiParser;
 
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -46,7 +43,7 @@ public class ChatArrayAdapter extends BaseAdapter {
     private static final int TYPE_LEFT = 0;
     private static final int TYPE_RIGHT = 1;
     private static final int TYPE_MAX_COUNT = 2;
-    ImageLoader imageLoader = ImageLoader.getInstance();
+
     public ChatArrayAdapter(Activity activity) {
 
         this.context = activity;
@@ -174,46 +171,27 @@ public class ChatArrayAdapter extends BaseAdapter {
 
             holder.tvchatMessage.setVisibility(View.GONE);
             holder.ivChatImage.setVisibility(View.VISIBLE);
-            String PATH="";
+
             if (data.get(position).islocally)
             {
 
-             //   loadImage(holder.ivChatImage, data.get(position).local_media_path);
-                PATH=data.get(position).local_media_path;
+                loadImage(holder.ivChatImage, data.get(position).local_media_path);
+
             }
 
             else
             {
 
-                PATH=URLs.AMAZON_IMG_BASE+ data.get(position).message;
-
-               // loadImage(holder.ivChatImage,URLs.AMAZON_IMG_BASE+ data.get(position).message);
+                loadImage(holder.ivChatImage,URLs.AMAZON_IMG_BASE+ data.get(position).message);
 
             }
-            imageLoader.displayImage(PATH, holder.ivChatImage);
-            Debug.e("Position and path",""+position+"-"+PATH);
-//            Picasso.with(context)
-//                    .load(PATH)
-//                    //.fit()
-//                    //.centerInside()
-//                    .into(holder.ivChatImage, new Callback() {
-//                        @Override
-//                        public void onSuccess() {
-//                        }
-//
-//                        @Override
-//                        public void onError() {
-//                        }
-//                    });
-
 
         } else
         {
 
             holder.tvchatMessage.setVisibility(View.VISIBLE);
             holder.ivChatImage.setVisibility(View.GONE);
-            Debug.e("message",""+chatMessageObj.message);
-            holder.tvchatMessage.setText(StringEscapeUtils.unescapeJava(chatMessageObj.message));//StringEscapeUtils.unescapeJava
+            holder.tvchatMessage.setText(chatMessageObj.message);
 
         }
 
@@ -230,23 +208,23 @@ public class ChatArrayAdapter extends BaseAdapter {
 
     }
 
-//    private void loadImage(ImageView iv, final String path) {
-//
-//        Picasso.with(context)
-//                .load(path)
-//                .fit()
-//                .centerInside()
-//                .into(iv, new Callback() {
-//                    @Override
-//                    public void onSuccess() {
-//                    }
-//
-//                    @Override
-//                    public void onError() {
-//                    }
-//                });
-//
-//    }
+    private void loadImage(ImageView iv, final String path) {
+
+        Picasso.with(context)
+                .load(path)
+                .fit()
+                .centerInside()
+                .into(iv, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                    }
+
+                    @Override
+                    public void onError() {
+                    }
+                });
+
+    }
 
 
 }

@@ -62,7 +62,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.http.Header;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicHeader;
@@ -170,7 +169,7 @@ public class ChatActivity extends AppCompatActivity implements ImageChooserListe
                 dialogforBlockorUnblock("unblock");
             } else if (etWriteMessage.getText().toString().length() != 0) {
                 if (Utils.isNetworkAvailable(ChatActivity.this)) {
-                    attemptSend(StringEscapeUtils.escapeJava(etWriteMessage.getText().toString()), 0, null);
+                    attemptSend(etWriteMessage.getText().toString(), 0, null);
                     etWriteMessage.setText("");
                 } else {
                     alertMessages.showErrornInConnection();
@@ -433,16 +432,13 @@ public class ChatActivity extends AppCompatActivity implements ImageChooserListe
                 isActivityResultOver = true;
 //                originalFilePath = chosenImage.getFilePathOriginal();
 //                Log.e("OriginalFilePath", originalFilePath);
-                thumbnailFilePath = chosenImage.getFilePathOriginal();
-//                String demo=chosenImage.getFilePathOriginal();
+                thumbnailFilePath = chosenImage.getFileThumbnail();
 
                 if (chosenImage != null) {
 
                     Bitmap bmp = imageLoader.loadImageSync("file://" + thumbnailFilePath);
 
                     Log.e("Base64", "" + encodeTobase64(bmp).length());
-                    Log.e("thumbnailFilePath", "" + thumbnailFilePath);
-//                    Log.e("demo", "" + demo);
 
                     if (Utils.isNetworkAvailable(ChatActivity.this)) {
 
@@ -674,7 +670,6 @@ public class ChatActivity extends AppCompatActivity implements ImageChooserListe
         this.menu = customMenu;
         getMenuInflater().inflate(R.menu.menu_chat, customMenu);
         menuItem_block = menu.findItem(R.id.action_block);
-
         if (isBlock == 0) {
             menuItem_block.setTitle("Block");
         } else {
@@ -700,7 +695,6 @@ public class ChatActivity extends AppCompatActivity implements ImageChooserListe
                 } else {
                     dialogforBlockorUnblock("unblock");
                 }
-                return true;
             case R.id.action_add_image:
                 showChooserDialog();
                 return true;
